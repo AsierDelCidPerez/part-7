@@ -2,14 +2,9 @@ import { useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
 
 
-const MyNote = () => {
-    const notes = useSelector(state => state.notes)
-    const id = useParams().id
-    console.log(id)
-    const myNote = notes.find(note => note.id === id)
-
+const MyNote = ({myNote}) => {
     return (
-        <div id={id}>
+        <div id={myNote.id}>
             <table class="table">
                 <thead>
                     <tr>

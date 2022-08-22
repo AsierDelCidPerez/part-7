@@ -1,6 +1,4 @@
-import { useSelector, useDispatch } from "react-redux"
-import { actOfSetUserWithUser } from "../../redux/reducers/userReducer"
-import { setToken } from "../../services/noteService"
+
 
 const Home = () => {
     return (
