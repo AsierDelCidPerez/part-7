@@ -1,17 +1,52 @@
 import { useState } from "react"
 import Notification from "./Notification"
+
+const useField = (type) => {
+    const [value, setValue] = useState('')
+    const onChange = e => setValue(e.target.value)
+    
+    return {
+        type, value, onChange, setValue
+    }
+}
+
 const Create = ({addNew}) => {
     const [notf, setNotf] = useState(null)
+    const content = useField('text')
+    const author = useField('text')
+    const url = useField('text')
+
     const handleSubmit = (e) => {
         e.preventDefault()
-        const el = e.target
         addNew({
-            content: el.content.value,
-            author: el.author.value,
-            url: el.url.value,
+            content: content.value,
+            author: author.value,
+            url: url.value,
             votes: 0
         })
-        setNotf(`a new anecdote: "${el.content.value}" has been created`)
+        setNotf(`a new anecdote: "${content.value}" has been created`)
+    }
+
+    const reset = () => {
+        content.setValue('')
+        author.setValue('')
+        url.setValue('')
+    }
+
+    const myUrl = {
+        value: url.value,
+        type: url.type, 
+        onChange: url.onChange
+    }
+    const myAuthor = {
+        value:author.value,
+        type:author.type, 
+        onChange: author.onChange
+    }
+    const myContent = {
+        value:content.value,
+        type:content.type, 
+        onChange: content.onChange
     }
 
     return (
@@ -21,17 +56,18 @@ const Create = ({addNew}) => {
         <form onSubmit={handleSubmit}>
             <div>
             content
-            <input name='content' placeholder="contenido" />
+            <input {...myContent} />
             </div>
             <div>
             author
-            <input name='author' placeholder="autor"/>
+            <input {...myAuthor} />
             </div>
             <div>
             url for more info
-            <input name='url' placeholder="URL de la web"/>
+            <input {...myUrl} />
             </div>
-            <button>create</button>
+            <button type="submit">create</button>
+            <button onClick={reset}>reset</button>
         </form>
     </div>
     )

@@ -9,6 +9,8 @@ const notesReducer = (state=[], action) => {
     
         case 'INIT_NOTES': 
             return action.data
+        case 'DELETE_NOTE':
+            return state.filter(note => note.id !== action.id)
         default: 
             return state
     }
@@ -40,6 +42,13 @@ export const actOfToggleImportanceWithId = id => {
     return {
         type: 'TOGGLE_IMPORTANCE',
         data: {id}
+    }
+}
+
+export const actOfDeleteNoteWithId = id => {
+    return {
+        type: 'DELETE_NOTE',
+        id
     }
 }
 
