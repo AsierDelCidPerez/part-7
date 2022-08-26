@@ -1,6 +1,4 @@
 import axios from 'axios'
-import {useDispatch, useSelector} from 'react-redux'
-import { actOfShowNotfWithMsg } from '../redux/reducers/notReducer'
 
 let token = null
 

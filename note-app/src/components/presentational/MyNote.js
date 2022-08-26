@@ -1,13 +1,11 @@
 
-import {useState} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import Modal from './Modal'
 import {useNavigate} from 'react-router-dom'
 import { actOfDeleteNoteWithId } from '../../redux/reducers/notesReducer'
 import useResource from '../../services/noteService'
+import {Button, TableContainer, Table, TableBody, TableCell, TableHead, Paper, TableRow, Grid} from '@mui/material'
 
-const MyNote = ({myNote}) => {
-    const [modal, setModal] = useState(null)
+const MyNote = ({myNote, setNotification}) => {
     const user = useSelector(state => state.user)
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -16,6 +14,9 @@ const MyNote = ({myNote}) => {
     const eliminacion = async() => {
         try {
             await recurso.deleteNote(myNote.id)
+            setNotification({
+                msg: `You have successfully deleted: ${myNote.content}`,
+            })
             dispatch(actOfDeleteNoteWithId(myNote.id))
             navigate('/')
         }catch(err) {
@@ -24,9 +25,13 @@ const MyNote = ({myNote}) => {
     }
 
     const eliminarNota = () => {
-        if(user.username === myNote.user.username){
-            if(window.confirm('¿Estas seguro de eliminar la nota?')){
-                eliminacion()
+        if(user){
+            if(user.username === myNote.user.username){
+                if(window.confirm('¿Estas seguro de eliminar la nota?')){
+                    eliminacion()
+                }
+            }else{
+                alert('No puedes eliminar una nota que no es de tu propiedad')
             }
         }else{
             alert('No puedes eliminar una nota que no es de tu propiedad')
@@ -35,29 +40,33 @@ const MyNote = ({myNote}) => {
 
     return (
         <div id={myNote.id}>
-            <table class="table">
-                <thead>
-                    <tr>
-                    <th scope="col">Clave</th>
-                    <th scope="col">Valor</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                    <th scope="row">Contenido</th>
-                    <td>{myNote.content}</td>
-                    </tr>
-                    <tr>
-                    <th scope="row">Importante</th>
-                    <td>{myNote.important ? 'IMPORTANTE' : 'NO IMPORTANTE'}</td>
-                    </tr>
-                    <tr>
-                    <th scope="row">Autor</th>
-                    <td>{myNote.user.name}</td>
-                    </tr>
-                </tbody>
-            </table>
-            <button onClick={eliminarNota}>Eliminar</button>
+            <TableContainer component={Paper} margin="normal">
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Clave</TableCell>
+                            <TableCell>Valor</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        <TableRow>
+                            <TableCell>Contenido</TableCell>
+                            <TableCell>{myNote.content}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell scope="row">Importante</TableCell>
+                            <TableCell>{myNote.important ? 'IMPORTANTE' : 'NO IMPORTANTE'}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell scope="row">Autor</TableCell>
+                            <TableCell>{myNote.user.name}</TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+                </TableContainer>
+                <Grid item/>
+                <br/>
+                <Button fullWidth variant="outlined" onClick={eliminarNota} color="error">Eliminar</Button>
         </div>
     )
 }

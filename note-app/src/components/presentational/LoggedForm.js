@@ -2,11 +2,15 @@ import { useDispatch } from "react-redux"
 import { actOfUnsetUser } from "../../redux/reducers/userReducer"
 
 
-const LoggedForm = ({user}) => {
+const LoggedForm = ({user, setNotification}) => {
     const dispatch = useDispatch()
     const logOut = () => {
         window.localStorage.removeItem('NoteAppUserLogin')
         dispatch(actOfUnsetUser())
+        setNotification({
+            msg: `You have succesfully logged out`,
+            type: 1
+        })
     }
 
     return (

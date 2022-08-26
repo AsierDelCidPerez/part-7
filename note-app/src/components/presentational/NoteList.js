@@ -1,13 +1,19 @@
-import { useEffect } from "react"
-import { useSelector } from "react-redux"
+
 import Note from "./Note"
+import {TableContainer, Table, TableBody, Paper} from '@mui/material'
 
 const NoteList = ({notesToShow, changeImportant}) => {
     notesToShow.sort((a, b) => a.content < b.content)
     return (
-        <ul>
-            {notesToShow.map(note => <Note key={note.id} note={note} changeImportant={changeImportant}/>)}
-        </ul>
+        <TableContainer component={Paper}>
+            <Table>
+                <TableBody>
+                        {notesToShow.map(note => 
+                            <Note key={note.id} note={note} changeImportant={changeImportant}/>
+                        )}
+                </TableBody>
+            </Table>
+        </TableContainer>
     )
 }
 

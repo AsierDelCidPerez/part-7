@@ -1,36 +1,30 @@
 
-const Modal = ({onAccept, onClose, content, config={
+import { Modal, Button } from "react-bootstrap"
+
+const MyModal = ({onAccept=() => {}, showable=[false, () => {}], content={body: '', title: ''}, config={
     acceptText: 'Aceptar',
     closeText: 'Cerrar',
-    hasSmallClose: true,
-    isVerticallyCentred: false,
+    onClose : () => showable[1]({
+        onAccept,showable: [false, showable[1]],content,config
+    })
 }}) => {
     // content = {text, title}
-    const getAcceptButton = () => <button type="button" onClick={onAccept} className="btn btn-primary">{config.acceptText}</button>
-    const getSmallClose = () => (
-        <button onClick={onClose} type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    )
+    const getAcceptButton = () => <Button variant="primary" onClick={onAccept}>{config.acceptText}</Button>
+    
     return (
-    <div className="modal" tabindex="-1" role="dialog">
-        <div className={config.isVerticallyCentred ? "modal-dialog modal-dialog-centered" : "modal-dialog"} role="document">
-            <div className="modal-content">
-            <div className="modal-header">
-                <h5 className="modal-title">{content.title}</h5>
-                {config.hasSmallClose && getSmallClose()}
-            </div>
-            <div className="modal-body">
-                <p>{content.text}</p>
-            </div>
-            <div className="modal-footer">
+        <Modal show={showable[0]} onHide={config.onClose}>
+            <Modal.Header closeButton>
+                <Modal.Title>{content.title}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>{content.body}</Modal.Body>
+            <Modal.Footer>
+                <Button variant="secondary" onClick={config.onClose}>
+                    {config.closeText}
+                </Button>
                 {onAccept && getAcceptButton()}
-                <button type="button" onClick={onClose} className="btn btn-secondary" data-dismiss="modal">{config.acceptText}</button>
-            </div>
-            </div>
-        </div>
-    </div>
+            </Modal.Footer>
+      </Modal>
     )
 }
 
-export default Modal
+export default MyModal

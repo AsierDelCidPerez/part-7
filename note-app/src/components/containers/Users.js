@@ -1,13 +1,11 @@
-import { useDispatch, useSelector } from "react-redux"
-import { actOfSetUserWithUser } from "../../redux/reducers/userReducer"
-import { setToken } from "../../services/noteService"
+import { useSelector } from "react-redux"
 import LoggedForm from "../presentational/LoggedForm"
 import LoginForm from "../presentational/LoginForm"
 
-const Users = () => {
+const Users = ({setNotification}) => {
     const user = useSelector(state => state.user)
-    const getLoginForm = () => <LoginForm/>
-    const getLoggedForm = () => <LoggedForm user={user}/>
+    const getLoginForm = () => <LoginForm setNotification={setNotification}/>
+    const getLoggedForm = () => <LoggedForm user={user} setNotification={setNotification}/>
 
     return (
         <div>
