@@ -1,3 +1,5 @@
+const morgan = require('morgan')
+
 const errorHandler = (error, req, res, next) => {
     console.log(error.message)
     if(error.name === 'CastError') res.status(400).send({error: 'malformated id'})
@@ -6,8 +8,14 @@ const errorHandler = (error, req, res, next) => {
     next(error)
 }
 
+const getIpAdrr = (req, _, next) => {
+    const ip = morgan(':remote-addr')
+    req.ip = ip
+    next()
+}
+
 const unknownEndpoint = (req, res, next) => {
     res.status(404).send({error: 'Not found'})
 }
 
-module.exports = {errorHandler, unknownEndpoint}
+module.exports = {errorHandler, unknownEndpoint, getIpAdrr}
