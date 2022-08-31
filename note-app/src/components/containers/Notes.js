@@ -5,7 +5,6 @@ import useResource from "../../services/noteService"
 import NoteForm from "../presentational/NoteForm"
 import NoteList from "../presentational/NoteList"
 import Notification from "./Notification"
-import { createNew } from "../../services/noteService"
 import { actOfCreateNoteWithNote } from "../../redux/reducers/notesReducer"
 
 const Notes = () => {
@@ -49,7 +48,7 @@ const Notes = () => {
                 msg: `Has agregado exitosamente: ${content}`,
                 type: 1
             })
-            dispatch(actOfInitNotes(await recurso.getAllNotes()))
+            // dispatch(actOfInitNotes(await recurso.getAllNotes()))
         }catch(err){
             setNotf({
                 msg: err.message,

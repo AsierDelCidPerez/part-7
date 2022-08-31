@@ -24,9 +24,7 @@ export const actOfCreateNoteWithNote = note => {
     return {
         type: 'NEW_NOTE',
         data: {
-            id: note.id,
-            content: note.content,
-            important: false
+            ...note
         }
     }
 }
