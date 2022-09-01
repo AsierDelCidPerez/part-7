@@ -7,8 +7,9 @@ require('express-async-errors')
 const logger = require('./utils/logger')
 const userRouter = require('./controllers/users')
 const notesRouter = require('./controllers/notes')
-const {errorHandler, unknownEndpoint, getIpAdrr} = require('./utils/middleware')
+const {errorHandler, unknownEndpoint, getIpAdrr, maintenanceEndpoint, closeEndpoint} = require('./utils/middleware')
 const loginRouter = require('./controllers/login')
+const helmet = require('helmet')
 
 logger.info(`connecting to ${config.PORT}`)
 
@@ -16,7 +17,8 @@ mongoose.connect(config.MONGODB_URI)
         .then(() => logger.info('Connected to MONGODB'))
         .catch(err => logger.error(`Error connecting to MongoDB: ${err.message}`))
 
-app.use(getIpAdrr)
+app.use(helmet())
+// app.use(closeEndpoint)
 app.use(express.json())
 app.use(express.static('build'))
 app.use(cors()) // Permite conexiones cruzadas, es decir de diferentes dominios
@@ -31,5 +33,6 @@ app.use('/api/users', userRouter)
 app.use('/api/login', loginRouter)
 
 app.use(errorHandler)
+app.use(unknownEndpoint)
 
 module.exports = app
