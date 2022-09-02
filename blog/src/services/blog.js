@@ -25,7 +25,10 @@ const getAll = async() => {
     return res.data
 }
 
-const getById = id => axios.get(`${baseUrl}/${id}`).then(res => res.data)
+const getById = async id => {
+    const res = await axios.get(`${baseUrl}/${id}`)
+    return res.data
+}
 
 const deleteBlog = async id => {
     const config = {
@@ -35,8 +38,15 @@ const deleteBlog = async id => {
     return res.data
 }
 
-const editaBlog = async(blog, id) => await axios.put(`${baseUrl}/${id}`, blog)
+const editaBlog = async(blog, id) => (await axios.put(`${baseUrl}/${id}`, blog)).data
 
-const blogService = {agregarBlog, getAll, getById, deleteBlog, editaBlog, setToken}
+const addComment = async (idBlog, comment) => {
+    const config = {
+        headers: {Authorization: token}
+    }
+    return (await axios.post(`${baseUrl}/${idBlog}/comments`, comment, config)).data
+}
+
+const blogService = {agregarBlog, getAll, getById, deleteBlog, editaBlog, setToken, addComment}
 
 export default blogService

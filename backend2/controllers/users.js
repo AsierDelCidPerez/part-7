@@ -11,6 +11,11 @@ const getTokenFrom = request => {
     return null
 }
 
+userRouter.get('/:id', async(req, res, next) => {
+    const id = req.params.id
+    res.json(await User.findById(id).populate('blogs'))
+})
+
 userRouter.post('/', async(req, res, next) => {
     const body = req.body
 

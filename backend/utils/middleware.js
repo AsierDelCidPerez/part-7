@@ -19,6 +19,7 @@ const errorHandler = (error, req, res, next) => {
         agent: getAgent(req)
     }
     res.status(400).send(myError)
+    
 }
 
 const maintenanceEndpoint = (req, res, next) => {

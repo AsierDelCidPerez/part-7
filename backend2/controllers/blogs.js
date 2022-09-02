@@ -8,9 +8,9 @@ blogRouter.get('/', async(request, response) => {
 })
 
 blogRouter.get('/:id', async(request, response) => {
-    if(!request.token) return response.status(401).json({error: 'Token missing or invalid'})
-    const user = jwt.verify(request.token, process.env.SECRET)
-    response.json(await Blog.findById(request.params.id))}
+    //if(!request.token) return response.status(401).json({error: 'Token missing or invalid'})
+    //const user = jwt.verify(request.token, process.env.SECRET)
+    response.json(await Blog.findById(request.params.id).populate('userId', {username: 1, name: 1, id: 1}))}
 )
 
 blogRouter.delete('/:id', async(request, response) => {
@@ -20,7 +20,7 @@ blogRouter.delete('/:id', async(request, response) => {
     console.log(user)
     console.log(blog)
     if(user){
-        if(user.username == blog.userId.username){
+        if(user.username === blog.userId.username){
             await Blog.findByIdAndRemove(request.params.id)
             response.status(204).end()
         }else{
@@ -59,13 +59,33 @@ blogRouter.post('/', async(request, response) => {
             author: body.author,
             url: body.url,
             likes: !body.likes ? "0": Number.parseInt(body.likes),
-            userId : user.id
+            userId : user.id,
+            comments: []
         })
         const miBlog = await blog.save()
         user.blogs = user.blogs.concat(miBlog.id)
         await user.save()
-        response.json(miBlog)
+        const myBlogFinal = await Blog.findById(miBlog.id).populate('userId')
+        response.json(myBlogFinal)
     }
+})
+
+blogRouter.post('/:id/comments', async(req, res, next) => {
+    const token = req.get('Authorization')
+    if(!token) return res.json({error: 'Token missing or invalid'})
+    const blogId = req.params.id
+    const myBlog = await Blog.findById(blogId)
+    const body = req.body
+
+    const myUser = jwt.verify(token.substring(7), process.env.SECRET)
+
+    myBlog.comments = myBlog.comments.concat({
+        user: myUser.id,
+        comment: body.comment
+    })
+
+    await myBlog.save()
+    res.json(myBlog)
 })
 
 module.exports = blogRouter

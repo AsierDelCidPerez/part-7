@@ -18,6 +18,7 @@
     "start": "cross-env NODE_ENV=production node index.js",
     "dev": "cross-env NODE_ENV=development nodemon index.js",
     "test": "cross-env NODE_ENV=test jest --verbose",
+    "front": "rm -Rf ./build && cd ../blog && npm run build && mv ./build ../backend2 && cd ../backend2 && npm run dev",
     "cypress:open": "cypress open",
     "start:test": "cross-env NODE_ENV=test node index.js"
   },
