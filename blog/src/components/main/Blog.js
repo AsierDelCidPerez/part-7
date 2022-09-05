@@ -17,7 +17,6 @@ const Blog = () => {
     useEffect(() => {
         blogService.getById(id).then(res => setBlog(res))
     }, [])
-    
     const like = () => {
         dispatch(likeBlog(blog))
         setBlog({
